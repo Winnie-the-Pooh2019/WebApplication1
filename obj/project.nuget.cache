@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nIyU/Hoqm7FEdOI4Pa5wqChLQMv3QQFZALXFdrVItiQzaq1LtEbQIQorA5LzMO/UN++wtNNzsJ2IME4Zjko2tA==",
+  "dgSpecHash": "TZqQqJ7rvbivxzxr24O3sposwGnkQFTsoC3IZ0XNOu1tymlbSSPtdmI/YjE/oYlfEV+fqmrShbCpUh8Z5vRbbA==",
   "success": true,
-  "projectFilePath": "/home/ivan/RiderProjects/WebApplication1/WebApplication1.csproj",
+  "projectFilePath": "/home/ivan/RiderProjects/samples/WebApplication1/WebApplication1.csproj",
   "expectedPackageFiles": [
     "/home/ivan/.nuget/packages/microsoft.aspnetcore.jsonpatch/6.0.0/microsoft.aspnetcore.jsonpatch.6.0.0.nupkg.sha512",
     "/home/ivan/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/6.0.0/microsoft.aspnetcore.mvc.newtonsoftjson.6.0.0.nupkg.sha512",
