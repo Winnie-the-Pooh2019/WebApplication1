@@ -13,7 +13,7 @@ public class MainController : ControllerBase {
         return NotFound();
     }
     
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<Product> GetById_ActionResultOfT(int id) {
@@ -26,10 +26,7 @@ public class MainController : ControllerBase {
 public class Product {
     public int id { get; }
 
-    private string name { get; }
-
     public Product(int id, string name) {
         this.id = id;
-        this.name = name;
     }
 }
