@@ -1,0 +1,25 @@
+                List of relations
+ Schema |         Name         |   Type   | Owner 
+--------+----------------------+----------+-------
+ public | books                | table    | ivan
+ public | books_id_seq         | sequence | ivan
+ public | categories           | table    | ivan
+ public | categories_id_seq    | sequence | ivan
+ public | clients              | table    | ivan
+ public | clients_id_seq       | sequence | ivan
+ public | deliveries           | table    | ivan
+ public | deliveries_id_seq    | sequence | ivan
+ public | priceChanges         | table    | ivan
+ public | priceChanges_id_seq  | sequence | ivan
+ public | publishers           | table    | ivan
+ public | publishers_id_seq    | sequence | ivan
+ public | purchaseItems        | table    | ivan
+ public | purchaseItems_id_seq | sequence | ivan
+ public | purchases            | table    | ivan
+ public | purchases_id_seq     | sequence | ivan
+ public | stores               | table    | ivan
+ public | stores_bookId_seq    | sequence | ivan
+ public | users                | table    | ivan
+ public | users_id_seq         | sequence | ivan
+(20 rows)
+

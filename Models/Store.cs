@@ -4,16 +4,14 @@ using Microsoft.OpenApi.Services;
 
 namespace WebApplication1.Models;
 
-[Table("store")]
 public record Store {
     [Key]
-    [ForeignKey("book_id")]
+    public int id { get; init; }
+    
     public Book book { get; init; }
     
     [Required]
-    [Column("books_count")]
     public int booksCount { get; init; }
     
-    [ForeignKey("current_price")]
     public PriceChange price { get; init; }
 }

@@ -1,16 +1,24 @@
-using System.Reflection.Emit;
 using Microsoft.AspNetCore.Mvc;
-using System.Web;
-using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using WebApplication1.Data;
 
 namespace WebApplication1.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class MainController : ControllerBase {
+
+    private readonly DataContext context;
+
+    public MainController(DataContext context) {
+        this.context = context;
+    }
+
     [HttpGet]
     public ActionResult get() {
-        return NotFound();
+        var users = context.users.ToList();
+
+        return Ok(users);
     }
     
     [HttpGet("{id:int}")]

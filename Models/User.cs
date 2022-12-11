@@ -3,14 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Models;
 
-public record PriceChange {
+public record User {
     [Key]
     public int id { get; init; }
     
-    [Column(TypeName = "Date")]
     [Required]
-    public DateTime priceChanged { get; init; }
+    public string name { get; init; }
     
-    [Required]
-    public double newPrice { get; init; }
-}
+    [Required] 
+    public string surname { get; init; }
+};
