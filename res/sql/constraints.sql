@@ -2,15 +2,15 @@ alter table purchases
     add constraint fk_purchases_clients
         foreign key (customer_id) references clients (id) on delete cascade;
 
-alter table purchase_item
+alter table "purchaseItems"
     add constraint fk_purchase_item_purchase
         foreign key (purchase_id) references purchases (id) on delete cascade;
 
-alter table purchase_item
+alter table "purchaseItems"
     add constraint fk_purchase_item_books
         foreign key (book_id) references books (id) on delete cascade;
 
-alter table purchase_item
+alter table "purchaseItems"
     add constraint fk_purchase_item_price_change
         foreign key (current_price) references price_change (id) on delete cascade;
 

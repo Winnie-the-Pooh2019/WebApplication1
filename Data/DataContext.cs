@@ -5,6 +5,8 @@ namespace WebApplication1.Data;
 
 public class DataContext : DbContext {
     public DbSet<User> users { get; set; }
+    public DbSet<Role> roles { get; set; }
+    public DbSet<RoleUser> roleUsers { get; set; }
     public DbSet<Book> books { get; set; }
     public DbSet<Category> categories { get; set; }
     public DbSet<Customer> clients { get; set; }
@@ -16,16 +18,16 @@ public class DataContext : DbContext {
     public DbSet<Store> stores { get; set; }
 
     public DataContext(DbContextOptions<DataContext> options) : base(options) {
-        Database.EnsureDeleted();
-        Database.EnsureCreated();
+        // Database.EnsureDeleted();
+        // Database.EnsureCreated();
+        // Database.Migrate();
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
         optionsBuilder.UseNpgsql(@"Host=localhost;Port=5432;Database=ivan;Username=ivan;Password=1234");
     }
 
-    public DataContext() {
-        Database.EnsureDeleted();
-        Database.EnsureCreated();
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        // modelBuilder.Entity<Store>().HasMany<Book>().WithOne(p => p.id);
     }
 }

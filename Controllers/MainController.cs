@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
+using WebApplication1.Models;
 
 namespace WebApplication1.Controllers;
 
@@ -16,7 +17,17 @@ public class MainController : ControllerBase {
 
     [HttpGet]
     public ActionResult get() {
-        var users = context.users.ToList();
+        var users = from u in context.users
+            join ru in context.roleUsers
+                on u.id equals ru.usersid
+            join r in context.roles
+                on ru.usersid equals r.id
+            select new {
+                userId = u.id,
+                name = u.name,
+                surname = u.surname,
+                role = r.name
+            };
 
         return Ok(users);
     }

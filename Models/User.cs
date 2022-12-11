@@ -12,4 +12,6 @@ public record User {
     
     [Required] 
     public string surname { get; init; }
+
+    public ICollection<RoleUser> rolesUsers { get; init; }
 };

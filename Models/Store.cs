@@ -6,7 +6,8 @@ namespace WebApplication1.Models;
 
 public record Store {
     [Key]
-    public int id { get; init; }
+    [ForeignKey("book")]
+    public int bookId { get; init; }
     
     public Book book { get; init; }
     

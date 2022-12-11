@@ -4,14 +4,14 @@ create table categories
     name varchar
 );
 
-create table price_change
+create table "priceChanges"
 (
     id            int primary key,
-    price_changed date,
-    new_price     double precision
+    priceChanged date,
+    newPrice     double precision
 );
 
-create table publisher
+create table publishers
 (
     id   int primary key,
     name varchar
@@ -20,23 +20,23 @@ create table publisher
 create table clients
 (
     id         int primary key,
-    last_name  varchar,
-    first_name varchar
+    lastName  varchar,
+    firstName varchar
 );
 
-create table store
+create table stores
 (
-    book_id       int primary key,
-    books_count   int,
-    current_price int
+    bookId       int primary key,
+    booksCount   int,
+    priceId int
 );
 
 create table deliveries
 (
     id            int primary key,
-    book_id       int,
-    delivery_date date,
-    books_count   int,
+    bookId       int,
+    deliveryDate date,
+    booksCount   int,
     price         double precision
 );
 
@@ -44,22 +44,22 @@ create table books
 (
     id           int primary key,
     name         varchar,
-    publisher_id int,
-    category_id  int
+    publisherId int,
+    categoryId  int
 );
 
 create table purchases
 (
     id            int primary key,
-    customer_id   int,
-    purchase_date date
+    customerId   int,
+    purchaseDate date
 );
 
-create table purchase_item
+create table "purchaseItems"
 (
     id            int primary key,
-    purchase_id   int,
-    book_id       int,
-    books_count   int,
-    current_price int
+    purchaseId   int,
+    bookId       int,
+    booksCount   int,
+    priceId int
 );
