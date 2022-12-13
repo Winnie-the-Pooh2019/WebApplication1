@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApplication1.Models;
+namespace WebApplication1.Data.Models;
 
 public record User {
     [Key]

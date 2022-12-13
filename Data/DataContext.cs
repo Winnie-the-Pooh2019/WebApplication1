@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using WebApplication1.Models;
+using WebApplication1.Data.Models;
 
 namespace WebApplication1.Data; 
 
@@ -23,9 +23,11 @@ public class DataContext : DbContext {
         // Database.Migrate();
     }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-        optionsBuilder.UseNpgsql(@"Host=localhost;Port=5432;Database=ivan;Username=ivan;Password=1234");
-    }
+    public DataContext() { }
+
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+    //     optionsBuilder.UseNpgsql(optionsBuilder.Con);
+    // }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         // modelBuilder.Entity<Store>().HasMany<Book>().WithOne(p => p.id);

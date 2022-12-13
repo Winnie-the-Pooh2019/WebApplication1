@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.OpenApi.Services;
 
-namespace WebApplication1.Models;
+namespace WebApplication1.Data.Models;
 
 public record Store {
     [Key]

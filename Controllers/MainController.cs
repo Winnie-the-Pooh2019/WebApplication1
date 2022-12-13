@@ -1,7 +1,14 @@
+using System.Data;
+using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
-using WebApplication1.Models;
+using WebApplication1.Data.Dto;
+using WebApplication1.Data.Models;
+using WebApplication1.Data.repo;
 
 namespace WebApplication1.Controllers;
 
@@ -9,12 +16,27 @@ namespace WebApplication1.Controllers;
 [Route("[controller]")]
 public class MainController : ControllerBase {
 
-    private readonly DataContext context;
-
-    public MainController(DataContext context) {
-        this.context = context;
+    private readonly IUsersRepository usersRepository;
+    private readonly IConfiguration configuration;
+    
+    public MainController(IUsersRepository usersRepository, IConfiguration configuration) {
+        this.usersRepository = usersRepository;
+        this.configuration = configuration;
     }
 
+    [HttpPost("/login")]
+    public ActionResult login(UserDto user) {
+        var actualUser = usersRepository.getByUsername(user.name);
+
+        var claims = new List<Claim>() {
+            new(JwtRegisteredClaimNames.Sub, configuration["Jwt:Subject"]!),
+            new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString(CultureInfo.CurrentCulture)),
+            new (ClaimsIdentity.DefaultNameClaimType, actualUser.name),
+            new(ClaimsIdentity.DefaultRoleClaimType, actualUser.role)
+        };
+    }
+
+    [Authorize]
     [HttpGet]
     public ActionResult get() {
         var users = from u in context.users

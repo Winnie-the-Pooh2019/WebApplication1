@@ -1,8 +1,7 @@
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApplication1.Models;
+namespace WebApplication1.Data.Models;
 
 [PrimaryKey(nameof(rolesid), nameof(usersid))]
 public record RoleUser {

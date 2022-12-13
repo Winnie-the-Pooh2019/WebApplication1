@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApplication1.Models;
+namespace WebApplication1.Data.Models;
 
 public record Book {
     [Key]

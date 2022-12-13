@@ -1,12 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApplication1.Models;
+namespace WebApplication1.Data.Models;
 
-public record Category {
+public record Publisher {
     [Key]
     public int id { get; init; }
     
     [Required]
     public string name { get; init; }
-}
+};

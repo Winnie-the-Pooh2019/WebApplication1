@@ -96,3 +96,10 @@
 /home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/System.Text.Encodings.Web.dll
 /home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/System.Text.Json.dll
 /home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/runtimes/browser/lib/net6.0/System.Text.Encodings.Web.dll
+/home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/Microsoft.IdentityModel.Logging.dll
+/home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/Microsoft.IdentityModel.Protocols.dll
+/home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/Microsoft.IdentityModel.Tokens.dll
+/home/ivan/RiderProjects/samples/WebApplication1/bin/Debug/net6.0/System.IdentityModel.Tokens.Jwt.dll
