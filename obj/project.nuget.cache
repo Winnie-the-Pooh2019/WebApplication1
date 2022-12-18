@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cy56FUsi4q3o4hn2RSW5QHj0d3Ity2rjOX0LCE+/fdg+4LFZegPPFWc37tWIkkD+qkLsuKT+WUytI1V4OBUyyA==",
+  "dgSpecHash": "Na8DlAF8d3zwJ4ZNiBO45NYFhZ/7ChqD852b1I/TUjvhHPmwpWZyTY3AW/iDStHvXl36dSQw1VNRAZie1PFifA==",
   "success": true,
-  "projectFilePath": "/home/ivan/RiderProjects/samples/WebApplication1/WebApplication1.csproj",
+  "projectFilePath": "/home/ivan/RiderProjects/WebApplication1/WebApplication1.csproj",
   "expectedPackageFiles": [
     "/home/ivan/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/home/ivan/.nuget/packages/microsoft.aspnetcore.authentication.jwtbearer/6.0.11/microsoft.aspnetcore.authentication.jwtbearer.6.0.11.nupkg.sha512",
@@ -46,7 +46,10 @@
     "/home/ivan/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "/home/ivan/.nuget/packages/system.security.cryptography.cng/4.5.0/system.security.cryptography.cng.4.5.0.nupkg.sha512",
     "/home/ivan/.nuget/packages/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg.sha512",
-    "/home/ivan/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512"
+    "/home/ivan/.nuget/packages/system.text.json/7.0.0/system.text.json.7.0.0.nupkg.sha512",
+    "/home/ivan/.nuget/packages/microsoft.netcore.app.ref/6.0.12/microsoft.netcore.app.ref.6.0.12.nupkg.sha512",
+    "/home/ivan/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.12/microsoft.aspnetcore.app.ref.6.0.12.nupkg.sha512",
+    "/home/ivan/.nuget/packages/microsoft.netcore.app.host.linux-x64/6.0.12/microsoft.netcore.app.host.linux-x64.6.0.12.nupkg.sha512"
   ],
   "logs": []
 }

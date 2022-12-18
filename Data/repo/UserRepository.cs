@@ -16,7 +16,7 @@ public class UserRepository : IUsersRepository {
                 on u.id equals ru.usersid
             join r in context.roles
                 on ru.usersid equals r.id
-            select new UserDto {name = u.name, role = r.name}).FirstOrDefault();
+            select new UserDto {name = u.name, role = r.name}).FirstOrDefault(u => u.name == username);
 
         if (user == null)
             throw new NullReferenceException();
