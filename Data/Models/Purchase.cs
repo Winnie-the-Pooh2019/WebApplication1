@@ -5,6 +5,7 @@ namespace WebApplication1.Data.Models;
 
 public record Purchase {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; init; }
     
     public Customer customer { get; init; }

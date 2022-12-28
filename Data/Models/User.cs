@@ -1,16 +1,28 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplication1.Data.Models;
 
 public record User {
     [Key]
-    public int id { get; init; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int id { get; set; }
     
     [Required]
-    public string name { get; init; }
+    public string loginName { get; set; }
+    
+    [Required]
+    public string password { get; set; }
     
     [Required] 
-    public string surname { get; init; }
+    public string firstName { get; set; }
+    
+    [Required]
+    public string lastName { get; set; }
+    
+    // [Required] 
+    // public string surname { get; set; }
 
-    public ICollection<RoleUser> rolesUsers { get; init; }
+    [Required]
+    public string role { get; set; }
 };

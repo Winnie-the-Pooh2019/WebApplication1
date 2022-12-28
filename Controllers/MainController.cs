@@ -3,9 +3,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using WebApplication1.Config;
 using WebApplication1.Data.Dto;
 using WebApplication1.Data.Models;
 using WebApplication1.Data.repo;
@@ -14,8 +14,8 @@ namespace WebApplication1.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class MainController : ControllerBase {
-
+public class MainController : Controller {
+    
     private readonly IUsersRepository usersRepository;
     private readonly IConfiguration configuration;
     
@@ -25,50 +25,57 @@ public class MainController : ControllerBase {
     }
 
     [HttpPost("/login")]
-    public ActionResult login(UserDto user) {
-        var actualUser = usersRepository.getByUsername(user.name);
+    public async Task<ActionResult> login(UserDto user) {
+        var identity = await getIdentity(user.login);
+        
+        if (identity == null)
+            return BadRequest(new { errorText = "Invalid username or password." });
 
-        var claims = new List<Claim>() {
-            // new (ClaimsIdentity.DefaultNameClaimType, actualUser.name),
-            // new(ClaimsIdentity.DefaultRoleClaimType, actualUser.role),
-            new(ClaimTypes.Name, actualUser.name),
-            new(ClaimTypes.Role, actualUser.role)
-        };
-
-        var identity = new ClaimsIdentity(
-            claims, "Token",
-            ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
-
+        var now = DateTime.UtcNow;
+        // создаем JWT-токен
         var jwt = new JwtSecurityToken(
-            issuer: configuration["Jwt:Issuer"],
-            audience: configuration["Jwt:Audience"],
-            // notBefore: DateTime.Now,
+            issuer: AuthOptions.ISSUER,
+            audience: AuthOptions.AUDIENCE,
+            notBefore: now,
             claims: identity.Claims,
-            expires: DateTime.Now.Add(TimeSpan.FromHours(2)),
-            signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(
-                configuration["Jwt:Key"] ?? throw new InvalidOperationException())), SecurityAlgorithms.HmacSha256)
-        );
-
+            expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+            signingCredentials: new SigningCredentials(AuthOptions.getSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-        return Ok(encodedJwt);
+ 
+        var response = new
+        {
+            access_token = encodedJwt,
+            username = identity.Name
+        };
+ 
+        return Json(response);
     }
 
     [Authorize(Roles = "admin")]
+    [HttpPost("/user/create")]
+    public async Task<ActionResult> createUser(UserDto userDto) {
+        var user = await usersRepository.createUser(userDto);
+
+        if (user == null)
+            return BadRequest();
+
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpPost("/user/update")]
+    public async Task<ActionResult> updateUser(UserDto userDto) {
+        var res = await usersRepository.updateUser(userDto);
+
+        if (res == false)
+            return BadRequest();
+
+        return Ok();
+    }
+
+    [Authorize]
     [HttpGet]
     public ActionResult get() {
-        // var users = from u in context.users
-        //     join ru in context.roleUsers
-        //         on u.id equals ru.usersid
-        //     join r in context.roles
-        //         on ru.usersid equals r.id
-        //     select new {
-        //         userId = u.id,
-        //         name = u.name,
-        //         surname = u.surname,
-        //         role = r.name
-        //     };
-
         return Ok(
         new {
             answer = "hello"
@@ -82,6 +89,22 @@ public class MainController : ControllerBase {
         var product = new Product(id, "hello");
 
         return product.id == 3 ? NotFound() : Ok(product);
+    }
+    
+    private async Task<ClaimsIdentity?> getIdentity(string username) {
+        UserDto? person = await usersRepository.getByUsername(username);
+
+        if (person == null) return null;
+        
+        var claims = new List<Claim>
+        {
+            new(ClaimsIdentity.DefaultNameClaimType, person.login),
+            new(ClaimsIdentity.DefaultRoleClaimType, person.role)
+        };
+        ClaimsIdentity claimsIdentity =
+            new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
+                ClaimsIdentity.DefaultRoleClaimType);
+        return claimsIdentity;
     }
 }
 

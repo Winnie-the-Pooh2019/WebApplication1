@@ -1,8 +1,10 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using WebApplication1;
 using WebApplication1.Data;
 using WebApplication1.Data.repo;
 
@@ -13,21 +15,28 @@ var builder = WebApplication.CreateBuilder(args);
 /*
  * Add authorization and authentication services to app builder
  */
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(jwt => {
-    jwt.RequireHttpsMetadata = false;
-    jwt.SaveToken = true;
-    // jwt.ForwardSignIn
-    jwt.AutomaticRefreshInterval = TimeSpan.FromMinutes(3);
-    jwt.TokenValidationParameters = new TokenValidationParameters() {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]))
-    };
-});
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            // указывает, будет ли валидироваться издатель при валидации токена
+            ValidateIssuer = true,
+            // строка, представляющая издателя
+            ValidIssuer = AuthOptions.ISSUER,
+            // будет ли валидироваться потребитель токена
+            ValidateAudience = true,
+            // установка потребителя токена
+            ValidAudience = AuthOptions.AUDIENCE,
+            // будет ли валидироваться время существования
+            ValidateLifetime = true,
+            // установка ключа безопасности
+            IssuerSigningKey = AuthOptions.getSymmetricSecurityKey(),
+            // валидация ключа безопасности
+            ValidateIssuerSigningKey = true,
+        };
+    });
 
 builder.Services.AddTransient<IUsersRepository, UserRepository>();
 
@@ -60,10 +69,17 @@ builder.Services.AddSwaggerGen(c => {
         }
     });
 });
-builder.Services.AddControllers()
-    .AddNewtonsoftJson();
+
+// builder.Services.AddDefaultIdentity<IdentityUser>( ... )
+//     .AddRoles<IdentityRole>()
+
+builder.Services.AddControllers();
+    // .AddNewtonsoftJson();
 
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

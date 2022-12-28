@@ -5,6 +5,7 @@ namespace WebApplication1.Data.Models;
 
 public record Delivery {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; init; }
     
     public Book book { get; init; }

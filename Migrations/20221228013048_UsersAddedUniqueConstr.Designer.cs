@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApplication1.Data;
@@ -11,9 +12,11 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221228013048_UsersAddedUniqueConstr")]
+    partial class UsersAddedUniqueConstr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -202,6 +205,16 @@ namespace WebApplication1.Migrations
                     b.ToTable("purchaseItems");
                 });
 
+            modelBuilder.Entity("WebApplication1.Data.Models.Role", b =>
+                {
+                    b.Property<string>("name")
+                        .HasColumnType("text");
+
+                    b.HasKey("name");
+
+                    b.ToTable("roles");
+                });
+
             modelBuilder.Entity("WebApplication1.Data.Models.Store", b =>
                 {
                     b.Property<int>("bookId")
@@ -244,7 +257,7 @@ namespace WebApplication1.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("role")
+                    b.Property<string>("rolename")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -252,6 +265,8 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("loginName")
                         .IsUnique();
+
+                    b.HasIndex("rolename");
 
                     b.ToTable("users");
                 });
@@ -341,6 +356,17 @@ namespace WebApplication1.Migrations
                     b.Navigation("book");
 
                     b.Navigation("price");
+                });
+
+            modelBuilder.Entity("WebApplication1.Data.Models.User", b =>
+                {
+                    b.HasOne("WebApplication1.Data.Models.Role", "role")
+                        .WithMany()
+                        .HasForeignKey("rolename")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("role");
                 });
 #pragma warning restore 612, 618
         }
