@@ -10,8 +10,8 @@ public record PriceChange {
     
     [Column(TypeName = "Date")]
     [Required]
-    public DateTime priceChanged { get; init; }
+    public DateTime priceChanged { get; set; }
     
     [Required]
-    public double newPrice { get; init; }
+    public double newPrice { get; set; }
 }

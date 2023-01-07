@@ -11,7 +11,9 @@ public record Store {
     public Book book { get; init; }
     
     [Required]
-    public int booksCount { get; init; }
+    public int booksCount { get; set; }
     
     public PriceChange price { get; init; }
+    
+    public int priceChangeId { get; set; }
 }

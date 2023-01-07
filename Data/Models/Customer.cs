@@ -9,8 +9,8 @@ public record Customer {
     public int id { get; init; }
     
     [Required]
-    public string firstName { get; init; }
+    public string firstName { get; set; }
     
     [Required]
-    public string lastName { get; init; }
+    public string lastName { get; set; }
 }

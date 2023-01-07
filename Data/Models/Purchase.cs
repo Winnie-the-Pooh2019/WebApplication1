@@ -9,8 +9,10 @@ public record Purchase {
     public int id { get; init; }
     
     public Customer customer { get; init; }
+    
+    public int customerId { get; set; }
 
     [Required] 
     [Column(TypeName = "Date")]
-    public DateTime purchaseDate { get; init; }
+    public DateTime purchaseDate { get; set; }
 };

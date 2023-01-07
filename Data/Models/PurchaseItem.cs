@@ -10,10 +10,16 @@ public record PurchaseItem {
     
     public Purchase purchase { get; init; }
     
+    public int purchaseId { get; set; }
+    
     public Book book { get; init; }
     
+    public int bookId { get; set; }
+    
     [Required]
-    public int booksCount { get; init; }
+    public int booksCount { get; set; }
     
     public PriceChange price { get; init; }
+    
+    public int priceId { get; set; }
 }

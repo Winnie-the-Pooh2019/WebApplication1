@@ -9,5 +9,5 @@ public record Publisher {
     public int id { get; init; }
     
     [Required]
-    public string name { get; init; }
+    public string name { get; set; }
 };

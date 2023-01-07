@@ -9,9 +9,13 @@ public record Book {
     public int id { get; init; }
 
     [Required]
-    public string name { get; init; }
+    public string name { get; set; }
     
     public Publisher publisher { get; init; }
     
+    public int publisherId { get; set; }
+    
     public Category category { get; init; }
+    
+    public int categoryId { get; set; }
 }

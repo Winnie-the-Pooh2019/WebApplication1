@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApplication1.Data;
@@ -11,9 +12,11 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230106073728_mig")]
+    partial class mig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,7 +98,7 @@ namespace WebApplication1.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("bookId")
+                    b.Property<int>("bookid")
                         .HasColumnType("integer");
 
                     b.Property<int>("booksCount")
@@ -109,7 +112,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("bookId");
+                    b.HasIndex("bookid");
 
                     b.ToTable("deliveries");
                 });
@@ -158,7 +161,7 @@ namespace WebApplication1.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("customerId")
+                    b.Property<int>("customerid")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("purchaseDate")
@@ -166,7 +169,7 @@ namespace WebApplication1.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("customerId");
+                    b.HasIndex("customerid");
 
                     b.ToTable("purchases");
                 });
@@ -179,25 +182,25 @@ namespace WebApplication1.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
-                    b.Property<int>("bookId")
+                    b.Property<int>("bookid")
                         .HasColumnType("integer");
 
                     b.Property<int>("booksCount")
                         .HasColumnType("integer");
 
-                    b.Property<int>("priceId")
+                    b.Property<int>("priceid")
                         .HasColumnType("integer");
 
-                    b.Property<int>("purchaseId")
+                    b.Property<int>("purchaseid")
                         .HasColumnType("integer");
 
                     b.HasKey("id");
 
-                    b.HasIndex("bookId");
+                    b.HasIndex("bookid");
 
-                    b.HasIndex("priceId");
+                    b.HasIndex("priceid");
 
-                    b.HasIndex("purchaseId");
+                    b.HasIndex("purchaseid");
 
                     b.ToTable("purchaseItems");
                 });
@@ -210,12 +213,12 @@ namespace WebApplication1.Migrations
                     b.Property<int>("booksCount")
                         .HasColumnType("integer");
 
-                    b.Property<int>("priceChangeId")
+                    b.Property<int>("priceid")
                         .HasColumnType("integer");
 
                     b.HasKey("bookId");
 
-                    b.HasIndex("priceChangeId");
+                    b.HasIndex("priceid");
 
                     b.ToTable("stores");
                 });
@@ -279,7 +282,7 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.Data.Models.Book", "book")
                         .WithMany()
-                        .HasForeignKey("bookId")
+                        .HasForeignKey("bookid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -290,7 +293,7 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.Data.Models.Customer", "customer")
                         .WithMany()
-                        .HasForeignKey("customerId")
+                        .HasForeignKey("customerid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -301,19 +304,19 @@ namespace WebApplication1.Migrations
                 {
                     b.HasOne("WebApplication1.Data.Models.Book", "book")
                         .WithMany()
-                        .HasForeignKey("bookId")
+                        .HasForeignKey("bookid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Data.Models.PriceChange", "price")
                         .WithMany()
-                        .HasForeignKey("priceId")
+                        .HasForeignKey("priceid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApplication1.Data.Models.Purchase", "purchase")
                         .WithMany()
-                        .HasForeignKey("purchaseId")
+                        .HasForeignKey("purchaseid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -334,7 +337,7 @@ namespace WebApplication1.Migrations
 
                     b.HasOne("WebApplication1.Data.Models.PriceChange", "price")
                         .WithMany()
-                        .HasForeignKey("priceChangeId")
+                        .HasForeignKey("priceid")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -9,14 +9,16 @@ public record Delivery {
     public int id { get; init; }
     
     public Book book { get; init; }
+    
+    public int bookId { get; set; }
 
     [Required] 
     [Column(TypeName = "Date")]
-    public DateTime deliveryDate { get; init; }
+    public DateTime deliveryDate { get; set; }
     
     [Required]
-    public int booksCount { get; init; }
+    public int booksCount { get; set; }
     
     [Required]
-    public double price { get; init; }
+    public double price { get; set; }
 }
