@@ -11,11 +11,11 @@ public record Book {
     [Required]
     public string name { get; set; }
     
-    public Publisher publisher { get; init; }
-    
+    public Publisher? publisher { get; set; }
+
     public int publisherId { get; set; }
     
-    public Category category { get; init; }
-    
+    public Category? category { get; set; }
+
     public int categoryId { get; set; }
 }

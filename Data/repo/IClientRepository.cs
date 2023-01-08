@@ -13,7 +13,7 @@ public interface IClientRepository {
     public Task<bool> deleteAllByLastName(string lastName);
     public Task<bool> deleteAll();
 
-    public Task<bool> createClient(Customer customer);
+    public Task<Customer?> createClient(Customer customer);
 
     public Task<bool> updateClient(Customer customer);
 }

@@ -9,10 +9,11 @@ public interface IDeliveryRepository {
     public Task<Delivery?> getById(int id);
 
     public Task<bool> deleteById(int id);
+    public Task<bool> deleteAll();
     public Task<bool> deleteAllByBookId(int id);
     public Task<bool> deleteAllByDeliveryDate(DateTime date);
 
-    public Task<bool> createDelivery(Delivery delivery);
+    public Task<Delivery?> createDelivery(Delivery delivery);
 
     public Task<bool> updateDelivery(Delivery delivery);
 }

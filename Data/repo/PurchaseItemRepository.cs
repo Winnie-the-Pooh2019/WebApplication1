@@ -86,16 +86,16 @@ public class PurchaseItemRepository : IPurchaseItemRepository {
         }
     }
 
-    public async Task<bool> createPurchaseItem(PurchaseItem purchaseItem) {
-        await context.purchaseItems.AddAsync(purchaseItem);
-        
+    public async Task<PurchaseItem?> createPurchaseItem(PurchaseItem purchaseItem) {
         try {
+            var res = await context.purchaseItems.AddAsync(purchaseItem);
+            
             await context.SaveChangesAsync();
-            return true;
+            return res.Entity;
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return false;
+            return null;
         }
     }
 

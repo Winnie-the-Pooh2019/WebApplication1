@@ -8,8 +8,8 @@ public record Delivery {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; init; }
     
-    public Book book { get; init; }
-    
+    public Book? book { get; set; }
+
     public int bookId { get; set; }
 
     [Required] 

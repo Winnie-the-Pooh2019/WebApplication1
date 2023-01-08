@@ -7,7 +7,7 @@ public interface IPublisherRepository {
     public Task<List<Publisher>> getAllByName(string name);
     public Task<Publisher?> getById(int id);
     
-    public Task<bool> createPublisher(Publisher publisher);
+    public Task<Publisher?> createPublisher(Publisher publisher);
 
     public Task<bool> deleteAll();
     public Task<bool> deleteAllByName(string name);

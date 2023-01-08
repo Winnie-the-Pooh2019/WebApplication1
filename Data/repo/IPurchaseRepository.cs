@@ -13,7 +13,7 @@ public interface IPurchaseRepository {
     public Task<bool> deleteAllByDate(DateTime date);
     public Task<bool> deleteAll();
 
-    public Task<bool> createPurchase(Purchase purchase);
+    public Task<Purchase?> createPurchase(Purchase purchase);
 
     public Task<bool> updatePurchase(Purchase purchase);
 }

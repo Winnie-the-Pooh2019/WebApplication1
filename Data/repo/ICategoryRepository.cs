@@ -7,7 +7,7 @@ public interface ICategoryRepository {
     public Task<List<Category>> getAllByName(string name);
     public Task<Category?> getById(int id);
 
-    public Task<bool> create(Category category);
+    public Task<Category?> create(Category category);
 
     public Task<bool> deleteAll();
     public Task<bool> deleteAllByName(string name);

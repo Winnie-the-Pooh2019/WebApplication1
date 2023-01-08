@@ -19,10 +19,9 @@ public record User {
     
     [Required]
     public string lastName { get; set; }
-    
-    // [Required] 
-    // public string surname { get; set; }
 
     [Required]
     public string role { get; set; }
+    
+    public string salt { get; set; }
 };

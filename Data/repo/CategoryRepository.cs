@@ -19,16 +19,15 @@ public class CategoryRepository : ICategoryRepository {
     public async Task<Category?> getById(int id) =>
         await context.categories.Where(category => category.id == id).FirstOrDefaultAsync();
 
-    public async Task<bool> create(Category category) {
-        await context.categories.AddAsync(category);
-
+    public async Task<Category?> create(Category category) {
         try {
+            var res = await context.categories.AddAsync(category);
             await context.SaveChangesAsync();
-            return true;
+            return res.Entity;
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return false;
+            return null;
         }
     }
 

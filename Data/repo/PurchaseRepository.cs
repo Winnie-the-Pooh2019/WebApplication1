@@ -87,16 +87,16 @@ public class PurchaseRepository : IPurchaseRepository {
         }
     }
 
-    public async Task<bool> createPurchase(Purchase purchase) {
-        await context.purchases.AddAsync(purchase);
-        
+    public async Task<Purchase?> createPurchase(Purchase purchase) {
         try {
+            var res = await context.purchases.AddAsync(purchase);
+            
             await context.SaveChangesAsync();
-            return true;
+            return res.Entity;
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return false;
+            return null;
         }
     }
 

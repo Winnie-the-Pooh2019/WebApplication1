@@ -9,8 +9,9 @@ public interface IPriceChangeRepository {
 
     public Task<bool> deleteById(int id);
     public Task<bool> deleteAllByDate(DateTime date);
+    public Task<bool> deleteAll();
 
-    public Task<bool> createPriceChange(PriceChange priceChange);
+    public Task<PriceChange?> createPriceChange(PriceChange priceChange);
 
     public Task<bool> updatePriceChange(PriceChange priceChange);
 }

@@ -5,7 +5,7 @@ using WebApplication1.Data.Models;
 namespace WebApplication1.Data.repo;
 
 public class BookRepository : IBookRepository {
-    private readonly DataContext context;
+    private DataContext context;
 
     public BookRepository(DataContext context) {
         this.context = context;
@@ -76,16 +76,15 @@ public class BookRepository : IBookRepository {
         }
     }
 
-    public async Task<bool> createBook(Book book) {
-        await context.books.AddAsync(book);
-
+    public async Task<Book?> createBook(Book book) {
         try {
+            var res = await context.books.AddAsync(book);
             await context.SaveChangesAsync();
-            return true;
+            return res.Entity;
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return false;
+            return null;
         }
     }
 

@@ -8,8 +8,8 @@ public record Purchase {
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int id { get; init; }
     
-    public Customer customer { get; init; }
-    
+    public Customer? customer { get; init; }
+
     public int customerId { get; set; }
 
     [Required] 

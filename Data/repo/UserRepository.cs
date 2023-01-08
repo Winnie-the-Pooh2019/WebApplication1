@@ -1,38 +1,31 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data.Dto;
 using WebApplication1.Data.Models;
+using WebApplication1.Utils;
 
 namespace WebApplication1.Data.repo;
 
 public class UserRepository : IUsersRepository {
-    private readonly DataContext context;
+    private DataContext context;
 
     public UserRepository(DataContext context) {
         this.context = context;
     }
 
-    public async Task<UserDto?> getByUsername(string username) {
-        var user = await (from u in context.users
-                select new UserDto { login = u.loginName, role = u.role.ToString() })
-            .FirstOrDefaultAsync(dto => dto.login == username);
+    public async Task<User?> getByUsername(string username) {
+        var user = await context.users.Where(u => u.loginName == username).FirstOrDefaultAsync();
 
         return user;
     }
 
-    public async Task<User?> createUser(UserDto userDto) {
-        // Role? role = await 
-        //     (from r in context.roles
-        //     select new Role() { name = r.name }).FirstOrDefaultAsync(role1 => role1.name == userDto.role);
-        //
-        // if (role == null)
-        //     return null;
-
-        User user = new User {
-            role = userDto.role,
-            password = userDto.password,
-            firstName = userDto.firstName,
-            lastName = userDto.lastName,
-            loginName = userDto.login
+    public async Task<User?> createUser(SignUpDto signUpDto) {
+        var user = new User {
+            role = signUpDto.role,
+            password = CryptEncoder.hashPassword(signUpDto.password, out var salt),
+            firstName = signUpDto.firstName,
+            lastName = signUpDto.lastName,
+            loginName = signUpDto.login,
+            salt = salt
         };
 
         try {
@@ -46,19 +39,38 @@ public class UserRepository : IUsersRepository {
         }
     }
 
-    public async Task<bool> updateUser(UserDto userDto) {
-        User? user = await context.users.FirstOrDefaultAsync(u => userDto.login == u.loginName);
+    public async Task<bool> updateUser(SignUpDto signUpDto) {
+        User? user = await context.users.FirstOrDefaultAsync(u => signUpDto.login == u.loginName);
 
         if (user == null)
             return false;
 
-        user.role = userDto.role;
-        user.password = userDto.password;
-        user.firstName = userDto.firstName;
-        user.lastName = userDto.lastName;
+        user.role = signUpDto.role;
+        user.password = CryptEncoder.hashPassword(signUpDto.password, out var salt);
+        user.firstName = signUpDto.firstName;
+        user.lastName = signUpDto.lastName;
         user.loginName = user.loginName;
+        user.salt = salt;
 
         try {
+            await context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
+    }
+
+    public async Task<bool> updateUser(User user) {
+        var savedUser = await context.users.FirstOrDefaultAsync(u => u.loginName == user.loginName);
+
+        if (savedUser == null) return false;
+
+        try {
+            savedUser.password = CryptEncoder.hashPassword(user.password, out var salt);
+            savedUser.salt = salt;
+
             await context.SaveChangesAsync();
             return true;
         }

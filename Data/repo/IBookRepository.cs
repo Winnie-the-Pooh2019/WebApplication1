@@ -14,7 +14,7 @@ public interface IBookRepository {
     public Task<bool> deleteAllByName(string name);
     public Task<bool> deleteAll();
     
-    public Task<bool> createBook(Book book);
+    public Task<Book?> createBook(Book book);
     
     public Task<bool> updateBook(Book book);
 }

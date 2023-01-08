@@ -38,6 +38,20 @@ public class DeliveryRepository : IDeliveryRepository {
         }
     }
 
+    public async Task<bool> deleteAll() {
+        var deliveries = await getAll();
+        context.deliveries.RemoveRange(deliveries);
+        
+        try {
+            await context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
+    }
+
     public async Task<bool> deleteAllByBookId(int id) {
         var delivery = await context.deliveries.Where(d => d.bookId == id).ToListAsync();
 
@@ -72,16 +86,16 @@ public class DeliveryRepository : IDeliveryRepository {
         }
     }
 
-    public async Task<bool> createDelivery(Delivery delivery) {
-        await context.deliveries.AddAsync(delivery);
-        
+    public async Task<Delivery?> createDelivery(Delivery delivery) {
         try {
+            var res = await context.deliveries.AddAsync(delivery);
+
             await context.SaveChangesAsync();
-            return true;
+            return res.Entity;
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return false;
+            return null;
         }
     }
 

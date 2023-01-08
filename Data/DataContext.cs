@@ -20,8 +20,8 @@ public class DataContext : DbContext {
         // Database.EnsureCreated();
         // Database.Migrate();
     }
-
-    public DataContext() { }
+    //
+    // public DataContext() { }
 
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
     //     optionsBuilder.UseNpgsql(optionsBuilder.Con);

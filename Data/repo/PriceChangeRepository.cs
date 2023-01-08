@@ -52,9 +52,10 @@ public class PriceChangeRepository : IPriceChangeRepository {
         }
     }
 
-    public async Task<bool> createPriceChange(PriceChange priceChange) {
-        await context.priceChanges.AddAsync(priceChange);
+    public async Task<bool> deleteAll() {
+        var chs = await context.priceChanges.ToListAsync();
 
+        context.priceChanges.RemoveRange(chs);
         try {
             await context.SaveChangesAsync();
             return true;
@@ -62,6 +63,19 @@ public class PriceChangeRepository : IPriceChangeRepository {
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
             return false;
+        }
+    }
+
+    public async Task<PriceChange?> createPriceChange(PriceChange priceChange) {
+        try {
+            var res = await context.priceChanges.AddAsync(priceChange);
+
+            await context.SaveChangesAsync();
+            return res.Entity;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.StackTrace);
+            return null;
         }
     }
 

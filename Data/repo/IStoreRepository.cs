@@ -7,8 +7,9 @@ public interface IStoreRepository {
     public Task<Store?> getById(int id);
 
     public Task<bool> deleteById(int id);
+    public Task<bool> deleteAll();
 
-    public Task<bool> createStore(Store store);
+    public Task<Store?> createStore(Store store);
 
     public Task<bool> updateStore(Store store);
 }

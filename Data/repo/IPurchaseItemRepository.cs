@@ -13,7 +13,7 @@ public interface IPurchaseItemRepository {
     public Task<bool> deleteAllByBookId(int bookId);
     public Task<bool> deleteAll();
 
-    public Task<bool> createPurchaseItem(PurchaseItem purchaseItem);
+    public Task<PurchaseItem?> createPurchaseItem(PurchaseItem purchaseItem);
 
     public Task<bool> updatePurchaseItem(PurchaseItem purchaseItem);
 }

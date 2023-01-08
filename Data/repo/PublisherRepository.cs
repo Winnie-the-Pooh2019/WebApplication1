@@ -18,16 +18,15 @@ public class PublisherRepository : IPublisherRepository {
     public async Task<Publisher?> getById(int id) =>
         await context.publishers.Where(category => category.id == id).FirstOrDefaultAsync();
 
-    public async Task<bool> createPublisher(Publisher publisher) {
-        await context.publishers.AddAsync(publisher);
-
+    public async Task<Publisher?> createPublisher(Publisher publisher) {
         try {
+            var res = await context.publishers.AddAsync(publisher);
             await context.SaveChangesAsync();
-            return true;
+            return res.Entity;
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return false;
+            return null;
         }
     }
 

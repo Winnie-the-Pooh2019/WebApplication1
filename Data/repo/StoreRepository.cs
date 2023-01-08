@@ -32,8 +32,9 @@ public class StoreRepository : IStoreRepository {
         }
     }
 
-    public async Task<bool> createStore(Store store) {
-        await context.stores.AddAsync(store);
+    public async Task<bool> deleteAll() {
+        var clients = await getAll();
+        context.stores.RemoveRange(clients);
         
         try {
             await context.SaveChangesAsync();
@@ -42,6 +43,19 @@ public class StoreRepository : IStoreRepository {
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
             return false;
+        }
+    }
+
+    public async Task<Store?> createStore(Store store) {
+        try {
+            var res = await context.stores.AddAsync(store);
+            
+            await context.SaveChangesAsync();
+            return res.Entity;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.StackTrace);
+            return null;
         }
     }
 

@@ -86,16 +86,15 @@ public class ClientRepository : IClientRepository {
         }
     }
 
-    public async Task<bool> createClient(Customer customer) {
-        await context.clients.AddAsync(customer);
-        
+    public async Task<Customer?> createClient(Customer customer) {
         try {
+            var res = await context.clients.AddAsync(customer);
             await context.SaveChangesAsync();
-            return true;
+            return res.Entity;
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return false;
+            return null;
         }
     }
 

@@ -1,29 +1,31 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using WebApplication1.Data.Dto;
+using WebApplication1.Data.Models;
 using WebApplication1.Data.repo;
+using WebApplication1.Utils;
 
 namespace WebApplication1.Controllers;
 
 [ApiController]
 [Route("[controller]")]
 public class MainController : Controller {
-    
     private readonly IUsersRepository usersRepository;
-    private readonly IConfiguration configuration;
-    
+    private IConfiguration configuration;
+
     public MainController(IUsersRepository usersRepository, IConfiguration configuration) {
         this.usersRepository = usersRepository;
         this.configuration = configuration;
     }
 
     [HttpPost("/login")]
-    public async Task<ActionResult> login(UserDto user) {
-        var identity = await getIdentity(user.login);
-        
+    public async Task<ActionResult> login([FromBody] SignInDto signUp) {
+        var identity = await getIdentity(signUp.login, signUp.password);
+
         if (identity == null)
             return BadRequest(new { errorText = "Invalid username or password." });
 
@@ -35,33 +37,37 @@ public class MainController : Controller {
             notBefore: now,
             claims: identity.Claims,
             expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
-            signingCredentials: new SigningCredentials(AuthOptions.getSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            signingCredentials: new SigningCredentials(AuthOptions.getSymmetricSecurityKey(),
+                SecurityAlgorithms.HmacSha256));
         var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
- 
-        var response = new
-        {
+
+        var response = new {
             access_token = encodedJwt,
             username = identity.Name
         };
- 
+
         return Json(response);
     }
 
     [Authorize(Roles = "admin")]
     [HttpPost("/user/create")]
-    public async Task<ActionResult> createUser(UserDto userDto) {
-        var user = await usersRepository.createUser(userDto);
+    public async Task<ActionResult> createUser([FromBody] SignUpDto signUpDto) {
+        var person = await usersRepository.getByUsername(signUpDto.login);
 
-        if (user == null)
-            return BadRequest();
+        if (person != null) return BadRequest("This user is already exists");
 
-        return Ok();
+        var user = await usersRepository.createUser(signUpDto);
+
+        return user == null ? StatusCode(500) : Ok();
     }
 
     [Authorize]
-    [HttpPost("/user/update")]
-    public async Task<ActionResult> updateUser(UserDto userDto) {
-        var res = await usersRepository.updateUser(userDto);
+    [HttpPut("/user/update")]
+    public async Task<ActionResult> updateUser([FromBody] SignUpDto signUpDto) {
+        var user = await usersRepository.getByUsername(signUpDto.login);
+        if (user != null) return BadRequest("This login is already taken");
+
+        var res = await usersRepository.updateUser(signUpDto);
 
         if (res == false)
             return BadRequest();
@@ -70,44 +76,28 @@ public class MainController : Controller {
     }
 
     [Authorize]
-    [HttpGet]
-    public ActionResult get() {
-        return Ok(
-        new {
-            answer = "hello"
-        });
-    }
-    
-    [HttpGet("{id:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public ActionResult<Product> GetById_ActionResultOfT(int id) {
-        var product = new Product(id, "hello");
+    [HttpPatch("/user/update")]
+    public async Task<ActionResult> patchUser([FromBody] SignInDto person) {
+        var user = await usersRepository.getByUsername(person.login);
+        if (user == null) return BadRequest("No user with such login");
 
-        return product.id == 3 ? NotFound() : Ok(product);
+        return await usersRepository.updateUser(user) ? Ok() : StatusCode(500);
     }
-    
-    private async Task<ClaimsIdentity?> getIdentity(string username) {
-        UserDto? person = await usersRepository.getByUsername(username);
+
+    private async Task<ClaimsIdentity?> getIdentity(string username, string password) {
+        User? person = await usersRepository.getByUsername(username);
 
         if (person == null) return null;
-        
-        var claims = new List<Claim>
-        {
-            new(ClaimsIdentity.DefaultNameClaimType, person.login),
+
+        if (!CryptEncoder.checkPassword(password, person.password, person.salt)) return null;
+
+        var claims = new List<Claim> {
+            new(ClaimsIdentity.DefaultNameClaimType, person.loginName),
             new(ClaimsIdentity.DefaultRoleClaimType, person.role)
         };
         ClaimsIdentity claimsIdentity =
             new ClaimsIdentity(claims, "Token", ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
         return claimsIdentity;
-    }
-}
-
-public class Product {
-    public int id { get; }
-
-    public Product(int id, string name) {
-        this.id = id;
     }
 }
