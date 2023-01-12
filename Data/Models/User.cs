@@ -9,7 +9,7 @@ public record User {
     public int id { get; set; }
     
     [Required]
-    public string loginName { get; set; }
+    public string login { get; set; }
     
     [Required]
     public string password { get; set; }

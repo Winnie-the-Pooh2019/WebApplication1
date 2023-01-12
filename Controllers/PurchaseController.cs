@@ -79,7 +79,7 @@ public class PurchaseController : Controller {
         }
     }
 
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpDelete("/purchase/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
@@ -94,7 +94,7 @@ public class PurchaseController : Controller {
         }
     }
     
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpDelete("/purchase/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
@@ -109,7 +109,7 @@ public class PurchaseController : Controller {
         }
     }
     
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpDelete("/purchase/delete/all/byCustomerId")]
     public async Task<ActionResult> deleteAllByCustomerId([FromQuery] int id) {
         try {
@@ -124,7 +124,7 @@ public class PurchaseController : Controller {
         }
     }
     
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpDelete("/purchase/delete/all/byDate")]
     public async Task<ActionResult> deleteAllByDate([FromQuery] string date) {
         try {
@@ -143,7 +143,7 @@ public class PurchaseController : Controller {
         }
     }
 
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpPost("/purchase/create")]
     public async Task<ActionResult> create([FromBody] Purchase purchase) {
         try {
@@ -158,7 +158,7 @@ public class PurchaseController : Controller {
         }
     }
     
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpPut("/purchase/update")]
     public async Task<ActionResult> update([FromBody] Purchase purchase) {
         try {

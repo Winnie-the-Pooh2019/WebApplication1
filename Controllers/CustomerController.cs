@@ -15,7 +15,7 @@ public class CustomerController : Controller {
     }
 
     [Authorize]
-    [HttpGet("clients/all")]
+    [HttpGet("/clients/all")]
     public async Task<ActionResult> getAll() {
         try {
             var clients = await clientRepository.getAll();

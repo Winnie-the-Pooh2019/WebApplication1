@@ -80,7 +80,7 @@ public class DeliveryController : Controller {
     }
 
     [Authorize(Roles = "admin")]
-    [HttpDelete("/deliveries/delete/byId")]
+    [HttpDelete("/delivery/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
             // var res = await deliveryRepository.deleteById(id);
@@ -95,7 +95,7 @@ public class DeliveryController : Controller {
     }
 
     [Authorize(Roles = "admin")]
-    [HttpDelete("/deliveries/delete/all")]
+    [HttpDelete("/delivery/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
             // var res = await deliveryRepository.deleteAll();
@@ -110,7 +110,7 @@ public class DeliveryController : Controller {
     }
 
     [Authorize(Roles = "admin")]
-    [HttpDelete("/deliveries/delete/byDeliveryDate")]
+    [HttpDelete("/delivery/delete/byDeliveryDate")]
     public async Task<ActionResult> deleteAllByDeliveryDate([FromQuery] string dateString) {
         try {
             // var res = await deliveryRepository.deleteAllByDeliveryDate(Convert.ToDateTime(dateString));
@@ -129,7 +129,7 @@ public class DeliveryController : Controller {
     }
 
     [Authorize(Roles = "admin")]
-    [HttpDelete("/deliveries/delete/byBookId")]
+    [HttpDelete("/delivery/delete/byBookId")]
     public async Task<ActionResult> deleteAllByBookId([FromQuery] int bookId) {
         try {
             // var res = await deliveryRepository.deleteAllByBookId(bookId);
@@ -144,7 +144,7 @@ public class DeliveryController : Controller {
     }
 
     [Authorize(Roles = "admin")]
-    [HttpPost("/deliveries/create")]
+    [HttpPost("/delivery/create")]
     public async Task<ActionResult> createDelivery([FromBody] Delivery delivery) {
         try {
             // var book = await bookRepository.getById(delivery.bookId);
@@ -186,7 +186,7 @@ public class DeliveryController : Controller {
     }
 
     [Authorize(Roles = "admin")]
-    [HttpPut("/deliveries/update")]
+    [HttpPut("/delivery/update")]
     public async Task<ActionResult> update([FromBody] Delivery delivery) {
         try {
             // var book = await bookRepository.getById(delivery.bookId);

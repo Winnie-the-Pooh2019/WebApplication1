@@ -91,7 +91,7 @@ public class BooksController : Controller {
         }
     }
 
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpDelete("/books/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
@@ -125,8 +125,8 @@ public class BooksController : Controller {
     [HttpDelete("/books/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var res = await bookRepository.deleteAll();
-            var res = (await bookRepository.getAll()).Count != 0;
+            var res = await bookRepository.deleteAll();
+            // var res = (await bookRepository.getAll()).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }

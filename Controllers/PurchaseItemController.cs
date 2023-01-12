@@ -30,7 +30,7 @@ public class PurchaseItemController : Controller {
     }
 
     [Authorize]
-    [HttpGet("/purchaseItems/all/byPurchaseId")]
+    [HttpGet("/purchaseItem/all/byPurchaseId")]
     public async Task<ActionResult> getAllByPurchaseId([FromQuery] int purchaseId) {
         try {
             var purchaseItems = await purchaseItemRepository.getAllByPurchaseId(purchaseId);

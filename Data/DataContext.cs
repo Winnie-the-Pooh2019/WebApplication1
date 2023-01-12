@@ -30,7 +30,7 @@ public class DataContext : DbContext {
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         // modelBuilder.Entity<Store>().HasMany<Book>().WithOne(p => p.id);
         modelBuilder.Entity<User>(entity => {
-            entity.HasIndex(e => e.loginName).IsUnique();
+            entity.HasIndex(e => e.login).IsUnique();
         });
         
         modelBuilder.Entity<User>()

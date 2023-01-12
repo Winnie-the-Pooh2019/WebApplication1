@@ -12,11 +12,16 @@ public class UserRepository : IUsersRepository {
         this.context = context;
     }
 
+    public async Task<List<User>> getAll() => await context.users.ToListAsync();
+
     public async Task<User?> getByUsername(string username) {
-        var user = await context.users.Where(u => u.loginName == username).FirstOrDefaultAsync();
+        var user = await context.users.Where(u => u.login == username).FirstOrDefaultAsync();
 
         return user;
     }
+
+    public async Task<User?> getById(int id) =>
+        await context.users.Where(category => category.id == id).FirstOrDefaultAsync();
 
     public async Task<User?> createUser(SignUpDto signUpDto) {
         var user = new User {
@@ -24,7 +29,7 @@ public class UserRepository : IUsersRepository {
             password = CryptEncoder.hashPassword(signUpDto.password, out var salt),
             firstName = signUpDto.firstName,
             lastName = signUpDto.lastName,
-            loginName = signUpDto.login,
+            login = signUpDto.login,
             salt = salt
         };
 
@@ -40,7 +45,7 @@ public class UserRepository : IUsersRepository {
     }
 
     public async Task<bool> updateUser(SignUpDto signUpDto) {
-        User? user = await context.users.FirstOrDefaultAsync(u => signUpDto.login == u.loginName);
+        User? user = await context.users.FirstOrDefaultAsync(u => signUpDto.login == u.login);
 
         if (user == null)
             return false;
@@ -49,7 +54,7 @@ public class UserRepository : IUsersRepository {
         user.password = CryptEncoder.hashPassword(signUpDto.password, out var salt);
         user.firstName = signUpDto.firstName;
         user.lastName = signUpDto.lastName;
-        user.loginName = user.loginName;
+        user.login = user.login;
         user.salt = salt;
 
         try {
@@ -63,7 +68,7 @@ public class UserRepository : IUsersRepository {
     }
 
     public async Task<bool> updateUser(User user) {
-        var savedUser = await context.users.FirstOrDefaultAsync(u => u.loginName == user.loginName);
+        var savedUser = await context.users.FirstOrDefaultAsync(u => u.login == user.login);
 
         if (savedUser == null) return false;
 
@@ -71,6 +76,23 @@ public class UserRepository : IUsersRepository {
             savedUser.password = CryptEncoder.hashPassword(user.password, out var salt);
             savedUser.salt = salt;
 
+            await context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e) {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
+    }
+
+    public async Task<bool> deleteById(int id) {
+        var res = await context.users.Where(category => category.id == id).FirstOrDefaultAsync();
+
+        if (res == null)
+            return false;
+
+        context.users.Remove(res);
+        try {
             await context.SaveChangesAsync();
             return true;
         }
