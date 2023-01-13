@@ -25,7 +25,7 @@ public class PurchaseItemController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound();
+            return NotFound("No items found");
         }
     }
 
@@ -65,12 +65,12 @@ public class PurchaseItemController : Controller {
         try {
             var purchaseItems = await purchaseItemRepository.getById(id);
 
-            if (purchaseItems == null) return NotFound();
+            if (purchaseItems == null) return NotFound("No item with such id found");
             return Ok(purchaseItems);
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound();
+            return NotFound("Error occured while query executing");
         }
     }
     
@@ -78,14 +78,14 @@ public class PurchaseItemController : Controller {
     [HttpDelete("/purchaseItem/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
-            // var res = await purchaseItemRepository.deleteById(id);
-            var res = (await purchaseItemRepository.getById(id)) != null;
+            var res = await purchaseItemRepository.deleteById(id);
+            // var res = (await purchaseItemRepository.getById(id)) != null;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No item with such id found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -93,8 +93,8 @@ public class PurchaseItemController : Controller {
     [HttpDelete("/purchaseItem/delete/byPurchaseId")]
     public async Task<ActionResult> deleteByPurchaseId([FromQuery] int purchaseId) {
         try {
-            // var res = await purchaseItemRepository.deleteAllByPurchaseId(purchaseId);
-            var res = (await purchaseItemRepository.getAllByPurchaseId(purchaseId)).Count != 0;
+            var res = await purchaseItemRepository.deleteAllByPurchaseId(purchaseId);
+            // var res = (await purchaseItemRepository.getAllByPurchaseId(purchaseId)).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -108,8 +108,8 @@ public class PurchaseItemController : Controller {
     [HttpDelete("/purchaseItem/delete/byBookId")]
     public async Task<ActionResult> deleteByBookId([FromQuery] int bookId) {
         try {
-            // var res = await purchaseItemRepository.deleteAllByBookId(bookId);
-            var res = (await purchaseItemRepository.getAllByBookId(bookId)).Count != 0;
+            var res = await purchaseItemRepository.deleteAllByBookId(bookId);
+            // var res = (await purchaseItemRepository.getAllByBookId(bookId)).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -123,14 +123,14 @@ public class PurchaseItemController : Controller {
     [HttpDelete("/purchaseItem/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var res = await purchaseItemRepository.deleteAll();
-            var res = (await purchaseItemRepository.getAll()).Count != 0;
+            var res = await purchaseItemRepository.deleteAll();
+            // var res = (await purchaseItemRepository.getAll()).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No items found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -140,11 +140,11 @@ public class PurchaseItemController : Controller {
         try {
             var res = await purchaseItemRepository.createPurchaseItem(item);
 
-            return res != null ? Ok() : StatusCode(500);
+            return res != null ? Ok() : StatusCode(500, "Such item already exists");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -154,11 +154,11 @@ public class PurchaseItemController : Controller {
         try {
             var res = await purchaseItemRepository.updatePurchaseItem(item);
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No item with such id found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 }

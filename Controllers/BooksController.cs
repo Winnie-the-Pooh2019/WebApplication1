@@ -87,7 +87,7 @@ public class BooksController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500);
+            return StatusCode(500, "Error occured while executing query");
         }
     }
 
@@ -95,14 +95,14 @@ public class BooksController : Controller {
     [HttpDelete("/books/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
-            // var res = await bookRepository.deleteById(id);
-            var res = await bookRepository.getById(id) != null;
+            var res = await bookRepository.deleteById(id);
+            // var res = await bookRepository.getById(id) != null;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Error while deleting occured");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while executing query");
         }
     }
 
@@ -110,14 +110,14 @@ public class BooksController : Controller {
     [HttpDelete("/books/delete/byName")]
     public async Task<ActionResult> deleteAllByName([FromQuery] string name) {
         try {
-            // var res = await bookRepository.deleteAllByName(name);
-            var res = (await bookRepository.getAllByName(name)).Count != 0;
+            var res = await bookRepository.deleteAllByName(name);
+            // var res = (await bookRepository.getAllByName(name)).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Error while deleting occured");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while executing query");
         }
     }
 
@@ -128,11 +128,11 @@ public class BooksController : Controller {
             var res = await bookRepository.deleteAll();
             // var res = (await bookRepository.getAll()).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Error while deleting occured");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while executing query");
         }
     }
 
@@ -159,11 +159,11 @@ public class BooksController : Controller {
             Console.WriteLine(bookDto);
             var res = await bookRepository.createBook(bookDto);
 
-            return res != null ? Ok() : StatusCode(500);
+            return res != null ? Ok() : StatusCode(500, "Error while creating occured");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while executing query");
         }
     }
 
@@ -190,11 +190,11 @@ public class BooksController : Controller {
             Console.WriteLine(bookDto);
 
             var res = await bookRepository.updateBook(bookDto);
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Error while update occured");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while executing query");
         }
     }
 }

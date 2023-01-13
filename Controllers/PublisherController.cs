@@ -25,7 +25,7 @@ public class PublisherController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("No Categories found");
         }
     }
     
@@ -50,12 +50,12 @@ public class PublisherController : Controller {
         try {
             var category = await publisherRepository.getById(id);
 
-            if (category == null) return NotFound();
+            if (category == null) return NotFound("Publisher with such id doesnt exists");
             return Ok(category);
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -63,14 +63,14 @@ public class PublisherController : Controller {
     [HttpDelete("/publisher/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
-            // var res = await bookRepository.deleteById(id);
-            var res = await publisherRepository.getById(id) != null;
+            var res = await publisherRepository.deleteById(id);
+            // var res = await publisherRepository.getById(id) != null;
     
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Publisher with such id doesnt exists");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -78,14 +78,14 @@ public class PublisherController : Controller {
     [HttpDelete("/publisher/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var res = await publisherRepository.deleteAll();
-            var res = (await publisherRepository.getAll()).Count != 0;
+            var res = await publisherRepository.deleteAll();
+            // var res = (await publisherRepository.getAll()).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No publishers found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -93,8 +93,8 @@ public class PublisherController : Controller {
     [HttpDelete("/publisher/delete/byName")]
     public async Task<ActionResult> deleteAllByName([FromQuery] string name) {
         try {
-            // var res = await publisherRepository.deleteAllByName(name);
-            var res = (await publisherRepository.getAllByName(name)).Count != 0;
+            var res = await publisherRepository.deleteAllByName(name);
+            // var res = (await publisherRepository.getAllByName(name)).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -111,11 +111,11 @@ public class PublisherController : Controller {
             Console.WriteLine(category);
             var res = await publisherRepository.createPublisher(category);
 
-            return res != null ? Ok() : StatusCode(500);
+            return res != null ? Ok() : StatusCode(500, "Such publisher already exists");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -124,11 +124,11 @@ public class PublisherController : Controller {
     public async Task<ActionResult> update([FromBody] Publisher categoryDto) {
         try {
             var res = await publisherRepository.updatePublisher(categoryDto);
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No publisher with such id found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 }

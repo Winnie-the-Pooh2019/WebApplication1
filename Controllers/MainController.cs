@@ -122,7 +122,7 @@ public class MainController : Controller {
         var res = await usersRepository.updateUser(signUpDto);
 
         if (res == false)
-            return BadRequest();
+            return BadRequest("Cannot update user");
 
         return Ok();
     }
@@ -143,11 +143,11 @@ public class MainController : Controller {
             var res = await usersRepository.deleteById(id);
             // var res = await categoryRepository.getById(id) != null;
     
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No user with such id found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 

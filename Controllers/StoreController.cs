@@ -25,7 +25,7 @@ public class StoreController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound();
+            return NotFound("No Store found");
         }
     }
 
@@ -35,12 +35,12 @@ public class StoreController : Controller {
         try {
             var store = await storeRepository.getById(id);
 
-            if (store == null) return NotFound();
+            if (store == null) return NotFound("No store with such id exists");
             return Ok(store);
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -48,14 +48,14 @@ public class StoreController : Controller {
     [HttpDelete("/store/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
-            // var res = await storeRepository.getById(id) != null;
             var res = await storeRepository.getById(id) != null;
+            // var res = await storeRepository.getById(id) != null;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No store found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -63,14 +63,14 @@ public class StoreController : Controller {
     [HttpDelete("/store/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var res = await storeRepository.deleteAll();
-            var res = (await storeRepository.getAll()).Count != 0;
+            var res = await storeRepository.deleteAll();
+            // var res = (await storeRepository.getAll()).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No stores found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -81,11 +81,11 @@ public class StoreController : Controller {
             Console.WriteLine(store);
             var res = await storeRepository.createStore(store);
 
-            return res != null ? Ok() : StatusCode(500);
+            return res != null ? Ok() : StatusCode(500, "Store with such id exists");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -96,11 +96,11 @@ public class StoreController : Controller {
             Console.WriteLine(store);
             var res = await storeRepository.updateStore(store);
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No store with such id found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 }

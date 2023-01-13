@@ -25,7 +25,7 @@ public class CustomerController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("No client found");
         }
     }
 
@@ -40,7 +40,7 @@ public class CustomerController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("No clients found");
         }
     }
     
@@ -55,7 +55,7 @@ public class CustomerController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("");
         }
     }
     
@@ -65,27 +65,27 @@ public class CustomerController : Controller {
         try {
             var category = await clientRepository.getById(id);
 
-            if (category == null) return NotFound();
+            if (category == null) return NotFound("No user found with such id");
             return Ok(category);
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
-    [Authorize("admin")]
+    [Authorize(Roles = "admin")]
     [HttpDelete("/clients/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
-            // var res = await clientRepository.deleteById(id);
-            var res = await clientRepository.getById(id) != null;
+            var res = await clientRepository.deleteById(id);
+            // var res = await clientRepository.getById(id) != null;
     
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No client found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -93,14 +93,14 @@ public class CustomerController : Controller {
     [HttpDelete("/clients/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var res = await clientRepository.deleteAll();
-            var res = (await clientRepository.getAll()).Count != 0;
+            var res = await clientRepository.deleteAll();
+            // var res = (await clientRepository.getAll()).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No clients found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -108,8 +108,8 @@ public class CustomerController : Controller {
     [HttpDelete("/clients/delete/byFirstName")]
     public async Task<ActionResult> deleteAllByFirstName([FromQuery] string firstName) {
         try {
-            // var res = await clientRepository.deleteAllByFirstName(name);
-            var res = (await clientRepository.getAllByFirstName(firstName)).Count != 0;
+            var res = await clientRepository.deleteAllByFirstName(firstName);
+            // var res = (await clientRepository.getAllByFirstName(firstName)).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -123,8 +123,8 @@ public class CustomerController : Controller {
     [HttpDelete("/clients/delete/byLastName")]
     public async Task<ActionResult> deleteAllByLastName([FromQuery] string lastName) {
         try {
-            // var res = await clientRepository.deleteAllByLastName(name);
-            var res = (await clientRepository.getAllByLastName(lastName)).Count != 0;
+            var res = await clientRepository.deleteAllByLastName(lastName);
+            // var res = (await clientRepository.getAllByLastName(lastName)).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -141,11 +141,11 @@ public class CustomerController : Controller {
             Console.WriteLine(client);
             var res = await clientRepository.createClient(client);
 
-            return res != null ? Ok() : StatusCode(500);
+            return res != null ? Ok() : StatusCode(500, "Client already exists");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -154,11 +154,11 @@ public class CustomerController : Controller {
     public async Task<ActionResult> update([FromBody] Customer clientDto) {
         try {
             var res = await clientRepository.updateClient(clientDto);
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No client found with such id");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 }

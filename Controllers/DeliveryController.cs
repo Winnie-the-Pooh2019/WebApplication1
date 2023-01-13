@@ -26,7 +26,7 @@ public class DeliveryController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("No deliveries found");
         }
     }
 
@@ -70,12 +70,12 @@ public class DeliveryController : Controller {
         try {
             var delivery = await deliveryRepository.getById(id);
 
-            if (delivery == null) return NotFound();
+            if (delivery == null) return NotFound("No delivery found with such id");
             return Ok(delivery);
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -83,14 +83,14 @@ public class DeliveryController : Controller {
     [HttpDelete("/delivery/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
-            // var res = await deliveryRepository.deleteById(id);
-            var res = await deliveryRepository.getById(id) != null;
+            var res = await deliveryRepository.deleteById(id);
+            // var res = await deliveryRepository.getById(id) != null;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No delivery found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -98,14 +98,14 @@ public class DeliveryController : Controller {
     [HttpDelete("/delivery/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var res = await deliveryRepository.deleteAll();
-            var res = (await deliveryRepository.getAll()).Count != 0;
+            var res = await deliveryRepository.deleteAll();
+            // var res = (await deliveryRepository.getAll()).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No delivery found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -113,8 +113,8 @@ public class DeliveryController : Controller {
     [HttpDelete("/delivery/delete/byDeliveryDate")]
     public async Task<ActionResult> deleteAllByDeliveryDate([FromQuery] string dateString) {
         try {
-            // var res = await deliveryRepository.deleteAllByDeliveryDate(Convert.ToDateTime(dateString));
-            var res = (await deliveryRepository.getAllByDeliveryDate(Convert.ToDateTime(dateString))).Count != 0;
+            var res = await deliveryRepository.deleteAllByDeliveryDate(Convert.ToDateTime(dateString));
+            // var res = (await deliveryRepository.getAllByDeliveryDate(Convert.ToDateTime(dateString))).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -132,8 +132,8 @@ public class DeliveryController : Controller {
     [HttpDelete("/delivery/delete/byBookId")]
     public async Task<ActionResult> deleteAllByBookId([FromQuery] int bookId) {
         try {
-            // var res = await deliveryRepository.deleteAllByBookId(bookId);
-            var res = (await deliveryRepository.getAllByBookId(bookId)).Count != 0;
+            var res = await deliveryRepository.deleteAllByBookId(bookId);
+            // var res = (await deliveryRepository.getAllByBookId(bookId)).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -173,15 +173,15 @@ public class DeliveryController : Controller {
             // delivery.book = book;
             // delivery.bookId = book.id;
             var res = await deliveryRepository.createDelivery(delivery);
-            return res != null ? Ok(res) : StatusCode(500);
+            return res != null ? Ok(res) : StatusCode(500, "Such delivery already exists");
         }
         catch (ArgumentException e) {
             Console.WriteLine(e.StackTrace);
-            return BadRequest(e.Message);
+            return BadRequest("Incorrect data format");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -215,15 +215,15 @@ public class DeliveryController : Controller {
             // }
 
             var res = await deliveryRepository.updateDelivery(delivery);
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No delivery found with such id");
         }
         catch (ArgumentException e) {
             Console.WriteLine(e.StackTrace);
-            return BadRequest(e.Message);
+            return BadRequest("Incorrect data format");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 }

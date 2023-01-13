@@ -25,7 +25,7 @@ public class PriceChangeController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("No prices found");
         }
     }
 
@@ -54,12 +54,12 @@ public class PriceChangeController : Controller {
         try {
             var price = await priceChangeRepository.getById(id);
 
-            if (price == null) return NotFound();
+            if (price == null) return NotFound("Price with such id doesn't exists");
             return Ok(price);
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -67,14 +67,14 @@ public class PriceChangeController : Controller {
     [HttpDelete("/price/delete/byId")]
     public async Task<ActionResult> deleteById([FromQuery] int id) {
         try {
-            // var price = await priceChangeRepository.deleteById(id);
-            var price = await priceChangeRepository.getById(id) != null;
+            var price = await priceChangeRepository.deleteById(id);
+            // var price = await priceChangeRepository.getById(id) != null;
 
-            return price ? Ok() : StatusCode(500);
+            return price ? Ok() : StatusCode(500, "No price with such id found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -82,14 +82,14 @@ public class PriceChangeController : Controller {
     [HttpDelete("/price/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var price = await priceChangeRepository.deleteAll();
-            var price = (await priceChangeRepository.getAll()).Count != 0;
+            var price = await priceChangeRepository.deleteAll();
+            // var price = (await priceChangeRepository.getAll()).Count != 0;
 
-            return price ? Ok() : StatusCode(500);
+            return price ? Ok() : StatusCode(500, "No prices found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -97,8 +97,8 @@ public class PriceChangeController : Controller {
     [HttpDelete("/price/delete/all/byDate")]
     public async Task<ActionResult> deleteAllByDate([FromQuery] string date) {
         try {
-            // var price = await priceChangeRepository.deleteAllByDate(Convert.ToDateTime(date));
-            var price = (await priceChangeRepository.getAllByDate(Convert.ToDateTime(date))).Count != 0;
+            var price = await priceChangeRepository.deleteAllByDate(Convert.ToDateTime(date));
+            // var price = (await priceChangeRepository.getAllByDate(Convert.ToDateTime(date))).Count != 0;
 
             return price ? Ok() : StatusCode(500);
         }
@@ -115,11 +115,11 @@ public class PriceChangeController : Controller {
             Console.WriteLine(priceChange);
             var res = await priceChangeRepository.createPriceChange(priceChange);
 
-            return res != null ? Ok() : StatusCode(500);
+            return res != null ? Ok() : StatusCode(500, "Such price already exists");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -128,11 +128,11 @@ public class PriceChangeController : Controller {
     public async Task<ActionResult> update([FromBody] PriceChange priceChange) {
         try {
             var res = await priceChangeRepository.updatePriceChange(priceChange);
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "No price with such id found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 }

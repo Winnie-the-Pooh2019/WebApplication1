@@ -25,7 +25,7 @@ public class CategoriesController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("No category found with such id");
         }
     }
     
@@ -40,7 +40,7 @@ public class CategoriesController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return NotFound(e.StackTrace);
+            return NotFound("No categories found");
         }
     }
     
@@ -55,7 +55,7 @@ public class CategoriesController : Controller {
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -66,11 +66,11 @@ public class CategoriesController : Controller {
             var res = await categoryRepository.deleteById(id);
             // var res = await categoryRepository.getById(id) != null;
     
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Error while deleting");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
 
@@ -78,14 +78,14 @@ public class CategoriesController : Controller {
     [HttpDelete("/categories/delete/all")]
     public async Task<ActionResult> deleteAll() {
         try {
-            // var res = await categoryRepository.deleteAll();
-            var res = (await categoryRepository.getAll()).Count != 0;
+            var res = await categoryRepository.deleteAll();
+            // var res = (await categoryRepository.getAll()).Count != 0;
 
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Error while deleting");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e);
+            return StatusCode(500, "Error occured while query executing");
         }
     }
     
@@ -93,8 +93,8 @@ public class CategoriesController : Controller {
     [HttpDelete("/categories/delete/byName")]
     public async Task<ActionResult> deleteAllByName([FromQuery] string name) {
         try {
-            // var res = await categoryRepository.deleteAllByName(name);
-            var res = (await categoryRepository.getAllByName(name)).Count != 0;
+            var res = await categoryRepository.deleteAllByName(name);
+            // var res = (await categoryRepository.getAllByName(name)).Count != 0;
 
             return res ? Ok() : StatusCode(500);
         }
@@ -111,11 +111,11 @@ public class CategoriesController : Controller {
             Console.WriteLine(category);
             var res = await categoryRepository.create(category);
 
-            return res != null ? Ok() : StatusCode(500);
+            return res != null ? Ok() : StatusCode(500, "Such customer already exists");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error while query executing");
         }
     }
     
@@ -124,11 +124,11 @@ public class CategoriesController : Controller {
     public async Task<ActionResult> update([FromBody] Category categoryDto) {
         try {
             var res = await categoryRepository.updateCategory(categoryDto);
-            return res ? Ok() : StatusCode(500);
+            return res ? Ok() : StatusCode(500, "Incorrect input data or no record found");
         }
         catch (Exception e) {
             Console.WriteLine(e.StackTrace);
-            return StatusCode(500, e.StackTrace);
+            return StatusCode(500, "Error while query executing");
         }
     }
 }
